@@ -102,6 +102,10 @@ public class AsyncTaskNetwork extends AsyncTask<Void, Void, ArrayList<Record>>  
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
+                if (isCancelled()) {
+                    break;
+                }
+
                 builder.append(line);
             }
             JSONObject rootJson = new JSONObject(builder.toString());
@@ -110,6 +114,10 @@ public class AsyncTaskNetwork extends AsyncTask<Void, Void, ArrayList<Record>>  
             JSONArray listJson = bodyJson.getJSONArray("list");
 
             for(int i=0; i<listJson.length(); i++) {
+                if (isCancelled()) {
+                    break;
+                }
+
                 JSONObject tmpJson = listJson.getJSONObject(i);
                 String image = tmpJson.get("image").toString();
                 String name = tmpJson.get("name").toString();

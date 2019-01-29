@@ -1,6 +1,7 @@
 package com.example.listadapterexample;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class MainListAdapter extends BaseAdapter {
+    private AsyncTaskImage loadingImage;
     private ArrayList<Record> mList = new ArrayList<Record>();
 
     // 현재 아이템의 수를 리턴
@@ -60,8 +62,8 @@ public class MainListAdapter extends BaseAdapter {
 
         if(holder.imageView != null && model.image != null){
             //holder.imageView.setText(model.image);
-            AsyncTaskImage loadingImage = new AsyncTaskImage(holder.imageView, model.image);
-            loadingImage.execute();
+            loadingImage = new AsyncTaskImage(holder.imageView, model.image);
+            loadingImage.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
         if(holder.nameView != null && model.name != null){

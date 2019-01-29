@@ -49,6 +49,11 @@ public class AsyncTaskImage extends AsyncTask<Void, Void, Bitmap> {
     @Override
     protected void onPostExecute(final Bitmap bm) {
         super.onPostExecute(bm);
+
+        if (isCancelled()) {
+            return;
+        }
+
         if (bm != null){ //if bitmap exists...
             view = imageViewReference.get();
             /*

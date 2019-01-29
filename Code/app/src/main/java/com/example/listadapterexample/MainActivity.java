@@ -18,10 +18,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
     */
-
+    private AsyncTaskNetwork networkTask;
     private ListView mListView;
     private MainListAdapter mAdapter;
     private ArrayList<Record> list = new ArrayList<Record>();
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        networkTask.cancel(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
         if(checkNetworkStatus() == false) {
             return;
         }
-        AsyncTaskNetwork network = new AsyncTaskNetwork(MainActivity.this);
-        network.execute();
+        networkTask = new AsyncTaskNetwork(MainActivity.this);
+        //networkTask.execute();
+        networkTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
 
