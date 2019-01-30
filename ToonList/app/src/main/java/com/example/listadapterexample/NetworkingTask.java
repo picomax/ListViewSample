@@ -20,7 +20,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class NetworkingTask extends AsyncTask<Void, Void, ToonListModel>  {
+public class NetworkingTask extends AsyncTask<String, Integer, ToonListModel>  {
     private final Context context;
 
     public NetworkingTask(Context context){
@@ -28,9 +28,9 @@ public class NetworkingTask extends AsyncTask<Void, Void, ToonListModel>  {
     }
 
     @Override
-    protected ToonListModel doInBackground(Void... voids) {
-        //ArrayList<ToonModel> toonList = new ArrayList<ToonModel>();
-/*
+    protected ToonListModel doInBackground(String... strings) {
+        /*
+        ArrayList<ToonModel> toonList = new ArrayList<ToonModel>();
         try {
             URL url = new URL("http://nick.hooni.net/list.php");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -65,20 +65,19 @@ public class NetworkingTask extends AsyncTask<Void, Void, ToonListModel>  {
             e.printStackTrace();
         }
 */
-
+        String urlString = strings[0];
         try {
-            URL url = new URL("http://nick.hooni.net/api/toon.php");
+            URL url = new URL(urlString);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setRequestProperty("Accept","application/json");
             urlConnection.setRequestProperty("X-AUTH-KEY", "haha1234");
-            urlConnection.setDoOutput(true);
-            urlConnection.setDoInput(true);
-            urlConnection.setChunkedStreamingMode(0);
+            //urlConnection.setDoOutput(true);
+            //urlConnection.setDoInput(true);
+            //urlConnection.setChunkedStreamingMode(0);
             urlConnection.setUseCaches(false);
             urlConnection.connect();
-
 
             JSONObject jsonParam = new JSONObject();
             //jsonParam.put("category", "1");
@@ -87,47 +86,29 @@ public class NetworkingTask extends AsyncTask<Void, Void, ToonListModel>  {
             OutputStream os = urlConnection.getOutputStream();
             os.write(jsonParam.toString().getBytes());
             os.close();
-/*
-            DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
-            os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-            os.flush();
-            os.close();
-*/
-            Log.i("STATUS", String.valueOf(urlConnection.getResponseCode()));
-            Log.i("MSG" , urlConnection.getResponseMessage());
 
             InputStream stream = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
             StringBuilder builder = new StringBuilder();
-
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (isCancelled()) {
                     break;
                 }
-
                 builder.append(line);
             }
+            urlConnection.disconnect();
+
+            if (isCancelled()) {
+                return null;
+            }
+
             JSONObject rootJson = new JSONObject(builder.toString());
             JSONObject headerJson = rootJson.getJSONObject("header");
+
             JSONObject bodyJson = rootJson.getJSONObject("body");
             JSONArray listJson = bodyJson.getJSONArray("list");
-            /*
-            for(int i=0; i<listJson.length(); i++) {
-                if (isCancelled()) {
-                    break;
-                }
-
-                JSONObject tmpJson = listJson.getJSONObject(i);
-                String image = tmpJson.get("image").toString();
-                String name = tmpJson.get("name").toString();
-                String desc = tmpJson.get("desc").toString();
-                ToonModel tmpToonModel = new ToonModel(image, name, desc);
-                toonList.add(tmpToonModel);
-            }
-            */
             ToonListModel toonListModel = new ToonListModel(listJson);
-            urlConnection.disconnect();
 
             return toonListModel;
         } catch (Exception e) {
