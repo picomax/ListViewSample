@@ -16,13 +16,13 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class AsyncTaskImage extends AsyncTask<Void, Void, Bitmap> {
+public class LoadingImageTask extends AsyncTask<Void, Void, Bitmap> {
     private String urlString = "";
     private ImageView view;
     private Bitmap bm;
     private final WeakReference<ImageView> imageViewReference;
 
-    public AsyncTaskImage(ImageView view, String urlString) {
+    public LoadingImageTask(ImageView view, String urlString) {
         this.imageViewReference = new WeakReference<ImageView>(view);
         this.urlString = urlString;
     }

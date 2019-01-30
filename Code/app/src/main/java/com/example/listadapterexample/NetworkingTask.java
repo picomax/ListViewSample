@@ -20,16 +20,16 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class AsyncTaskNetwork extends AsyncTask<Void, Void, ArrayList<Record>>  {
-    public Context context;
+public class NetworkingTask extends AsyncTask<Void, Void, ToonListModel>  {
+    private final Context context;
 
-    public AsyncTaskNetwork(Context context){
+    public NetworkingTask(Context context){
         this.context = context;
     }
 
     @Override
-    protected ArrayList<Record> doInBackground(Void... voids) {
-        ArrayList<Record> list = new ArrayList<Record>();
+    protected ToonListModel doInBackground(Void... voids) {
+        //ArrayList<ToonModel> toonList = new ArrayList<ToonModel>();
 /*
         try {
             URL url = new URL("http://nick.hooni.net/list.php");
@@ -112,7 +112,7 @@ public class AsyncTaskNetwork extends AsyncTask<Void, Void, ArrayList<Record>>  
             JSONObject headerJson = rootJson.getJSONObject("header");
             JSONObject bodyJson = rootJson.getJSONObject("body");
             JSONArray listJson = bodyJson.getJSONArray("list");
-
+            /*
             for(int i=0; i<listJson.length(); i++) {
                 if (isCancelled()) {
                     break;
@@ -122,13 +122,14 @@ public class AsyncTaskNetwork extends AsyncTask<Void, Void, ArrayList<Record>>  
                 String image = tmpJson.get("image").toString();
                 String name = tmpJson.get("name").toString();
                 String desc = tmpJson.get("desc").toString();
-                Record tmpRecord = new Record(image, name, desc);
-                list.add(tmpRecord);
+                ToonModel tmpToonModel = new ToonModel(image, name, desc);
+                toonList.add(tmpToonModel);
             }
-
+            */
+            ToonListModel toonListModel = new ToonListModel(listJson);
             urlConnection.disconnect();
 
-            return list;
+            return toonListModel;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,8 +137,8 @@ public class AsyncTaskNetwork extends AsyncTask<Void, Void, ArrayList<Record>>  
         return null;
     }
 
-    protected void onPostExecute(ArrayList<Record> list) {
-        super.onPostExecute(list);
-        ((MainActivity) context).onTaskCompleted(list);
+    protected void onPostExecute(ToonListModel toonListModel) {
+        super.onPostExecute(toonListModel);
+        ((MainActivity) context).onTaskCompleted(toonListModel);
     }
 }

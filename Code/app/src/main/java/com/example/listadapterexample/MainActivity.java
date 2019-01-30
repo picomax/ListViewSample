@@ -18,10 +18,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
     */
-    private AsyncTaskNetwork networkTask;
+    private NetworkingTask networkTask;
     private ListView mListView;
-    private MainListAdapter mAdapter;
-    private ArrayList<Record> list = new ArrayList<Record>();
+    private ToonListAdapter mAdapter;
+    private ArrayList<ToonModel> toonList = new ArrayList<ToonModel>();
 
     @Override
     protected void onDestroy() {
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.main_list);
 
         // 커스텀 어댑터 생성
-        mAdapter = new MainListAdapter();
+        mAdapter = new ToonListAdapter();
 
         // ListView에 어댑터 연결
         mListView.setAdapter(mAdapter);
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         if(checkNetworkStatus() == false) {
             return;
         }
-        networkTask = new AsyncTaskNetwork(MainActivity.this);
+        networkTask = new NetworkingTask(MainActivity.this);
         //networkTask.execute();
         networkTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    public void onTaskCompleted(ArrayList<Record> list) {
-        this.list = list;
-        mAdapter.setMainList(list);
+    public void onTaskCompleted(ToonListModel toonListModel) {
+        this.toonList = toonListModel.getToonList();
+        mAdapter.setToonList(toonList);
         mAdapter.notifyDataSetChanged();
     }
 }

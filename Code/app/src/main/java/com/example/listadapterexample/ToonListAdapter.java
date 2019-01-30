@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MainListAdapter extends BaseAdapter {
-    private AsyncTaskImage loadingImage;
-    private ArrayList<Record> mList = new ArrayList<Record>();
+public class ToonListAdapter extends BaseAdapter {
+    private LoadingImageTask loadingImage;
+    private ArrayList<ToonModel> mList = new ArrayList<ToonModel>();
 
     // 현재 아이템의 수를 리턴
     @Override
@@ -58,32 +58,32 @@ public class MainListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Record model = mList.get(position);
+        ToonModel toonModel = mList.get(position);
 
-        if(holder.imageView != null && model.image != null){
-            //holder.imageView.setText(model.image);
-            loadingImage = new AsyncTaskImage(holder.imageView, model.image);
+        if(holder.imageView != null && toonModel.image != null){
+            //holder.imageView.setText(toonModel.image);
+            loadingImage = new LoadingImageTask(holder.imageView, toonModel.image);
             loadingImage.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
-        if(holder.nameView != null && model.name != null){
-            holder.nameView.setText(model.name);
+        if(holder.nameView != null && toonModel.name != null){
+            holder.nameView.setText(toonModel.name);
         }
 
-        if(holder.descView != null && model.desc != null){
-            holder.descView.setText(model.desc);
+        if(holder.descView != null && toonModel.desc != null){
+            holder.descView.setText(toonModel.desc);
         }
 
         return convertView;
     }
 
-    public void setMainList(ArrayList<Record> list){
+    public void setToonList(ArrayList<ToonModel> list){
         this.mList = list;
     }
 
     // 외부에서 아이템 추가 요청 시 사용
-    public void add(Record model) {
-        mList.add(model);
+    public void add(ToonModel toonModel) {
+        mList.add(toonModel);
     }
 
     // 외부에서 아이템 삭제 요청 시 사용

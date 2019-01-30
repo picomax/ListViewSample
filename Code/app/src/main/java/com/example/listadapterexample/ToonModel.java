@@ -1,15 +1,15 @@
 package com.example.listadapterexample;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import org.json.JSONObject;
 
-public class Record {
+import java.util.ArrayList;
+
+public class ToonModel {
     public String image;
     public String name;
     public String desc;
 
-    Record(String image, String name, String desc){
+    ToonModel(String image, String name, String desc){
         this.image = image;
         this.name = name;
         this.desc = desc;
@@ -39,4 +39,3 @@ public class Record {
         this.desc = desc;
     }
 }
-
