@@ -13,13 +13,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private NetworkingTask networkTask;
-    private ListView mListView;
     private ToonListAdapter mAdapter;
+    private ListView mListView;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         networkTask.cancel(true);
     }
 
@@ -42,11 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestData(){
         if(checkNetworkStatus() == false) {
-            Toast.makeText(this, "Network is not available.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Network is not available.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String urlString = "http://nick.hooni.net/api/toon.php";
         networkTask = new NetworkingTask(new AsyncResponse(){
             @Override
             public void taskOnCompleted(Object output){
@@ -60,9 +58,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //networkTask.execute(urlString);
+
+        String urlString = "http://nick.hooni.net/api/toon.php";
         networkTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, urlString);
     }
-
 
     public boolean checkNetworkStatus() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         }
-
         return false;
     }
 }

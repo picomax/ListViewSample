@@ -19,12 +19,11 @@ public class ToonListModel {
         return sInstance;
     }
 
-    ToonListModel(JSONArray jsonArray){
-        super();
-        parseJson(jsonArray);
+    public static ToonListModel getInstance(JSONArray jsonArray){
+        return ToonListModel.getInstance().parseJson(jsonArray);
     }
 
-    public void parseJson(JSONArray jsonArray){
+    public ToonListModel parseJson(JSONArray jsonArray){
         try{
             for(int i=0; i<jsonArray.length(); i++) {
                 JSONObject tmpJson = jsonArray.getJSONObject(i);
@@ -37,6 +36,7 @@ public class ToonListModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return this;
     }
 
     public ArrayList<ToonModel> getToonList() {

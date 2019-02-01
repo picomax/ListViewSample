@@ -33,9 +33,9 @@ public class LoadingImageTask extends AsyncTask<Void, Void, Bitmap> {
         Bitmap bm = null;
         try {
             URL aURL = new URL(urlString);
-            URLConnection conn = aURL.openConnection();
-            conn.connect();
-            InputStream is = conn.getInputStream();
+            URLConnection urlConnection = aURL.openConnection();
+            urlConnection.connect();
+            InputStream is = urlConnection.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
             bm = BitmapFactory.decodeStream(bis);
             bis.close();
@@ -56,9 +56,9 @@ public class LoadingImageTask extends AsyncTask<Void, Void, Bitmap> {
 
         if (bm != null){ //if bitmap exists...
             view = imageViewReference.get();
-            /*
+/*
             // Fade out
-            Animation fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fadeoutimage);
+            Animation fadeOutAnimation = AnimationUtils.loadAnimation(view, R.anim.fade_out);
             fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
 
                 public void onAnimationStart(Animation animation) {
@@ -72,14 +72,14 @@ public class LoadingImageTask extends AsyncTask<Void, Void, Bitmap> {
                 public void onAnimationEnd(Animation animation) {
                     // Fade in
                     view.setImageBitmap(bm);
-                    Animation fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fadeinimage);
+                    Animation fadeInAnimation = AnimationUtils.loadAnimation(view, R.anim.fade_in);
                     view.startAnimation(fadeInAnimation);
                 }
             });
 
             // Launch the fadeout
             view.startAnimation(fadeOutAnimation);
-            */
+*/
             view.setImageBitmap(bm);
 
         }else{ //if not picture, display the default ressource
